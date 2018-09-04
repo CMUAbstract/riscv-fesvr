@@ -5,6 +5,7 @@
 
 #include "memif.h"
 #include "syscall.h"
+#include "simcall.h"
 #include "device.h"
 #include <string.h>
 #include <vector>
@@ -43,6 +44,10 @@ class htif_t : public chunked_memif_t
 
   reg_t get_entry_point() { return entry; }
 
+  // Sim call implementations
+  virtual void mark(addr_t addr, size_t len) {};
+  virtual void clear_mark(addr_t addr, size_t len) {};
+
  private:
   void parse_arguments(int argc, char ** argv);
   void register_devices();
@@ -63,6 +68,7 @@ class htif_t : public chunked_memif_t
 
   device_list_t device_list;
   syscall_t syscall_proxy;
+  simcall_t simcall_proxy;
   bcd_t bcd;
   std::vector<device_t*> dynamic_devices;
 
@@ -70,6 +76,7 @@ class htif_t : public chunked_memif_t
 
   friend class memif_t;
   friend class syscall_t;
+  friend class simcall_t;
 };
 
 /* Alignment guide for emulator.cc options:

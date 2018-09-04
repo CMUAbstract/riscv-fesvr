@@ -42,7 +42,7 @@ static void handle_signal(int sig)
 htif_t::htif_t()
   : mem(this), entry(DRAM_BASE), sig_addr(0), sig_len(0),
     tohost_addr(0), fromhost_addr(0), exitcode(0), stopped(false),
-    syscall_proxy(this)
+    syscall_proxy(this), simcall_proxy(this)
 {
   signal(SIGINT, &handle_signal);
   signal(SIGTERM, &handle_signal);
@@ -290,6 +290,7 @@ void htif_t::register_devices()
 {
   device_list.register_device(&syscall_proxy);
   device_list.register_device(&bcd);
+  device_list.register_device(&simcall_proxy);
   for (auto d : dynamic_devices)
     device_list.register_device(d);
 }

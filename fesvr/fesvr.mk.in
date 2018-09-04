@@ -5,6 +5,7 @@ fesvr_hdrs = \
   dtm.h \
   memif.h \
   syscall.h \
+  simcall.h \
   context.h \
   htif_pthread.h \
   htif_hexwriter.h \
@@ -20,6 +21,7 @@ fesvr_srcs = \
   memif.cc \
   dtm.cc \
   syscall.cc \
+  simcall.cc \
   device.cc \
   rfb.cc \
   context.cc \
