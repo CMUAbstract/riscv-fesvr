@@ -2,7 +2,6 @@
 
 #include "htif.h"
 #include "rfb.h"
-#include "elfloader.h"
 #include "encoding.h"
 #include <algorithm>
 #include <assert.h>
@@ -44,6 +43,7 @@ htif_t::htif_t()
     tohost_addr(0), fromhost_addr(0), exitcode(0), stopped(false),
     syscall_proxy(this), simcall_proxy(this)
 {
+  elf = new elfloader_t();
   signal(SIGINT, &handle_signal);
   signal(SIGTERM, &handle_signal);
   signal(SIGABRT, &handle_signal); // we still want to call static destructors
@@ -70,6 +70,7 @@ htif_t::htif_t(const std::vector<std::string>& args) : htif_t()
 
 htif_t::~htif_t()
 {
+  delete elf;
   for (auto d : dynamic_devices)
     delete d;
 }
@@ -99,11 +100,17 @@ void htif_t::load_program()
         "could not open " + targs[0] +
         " (did you misspell it? If VCS, did you forget +permissive/+permissive-off?)");
 
-  std::map<std::string, uint64_t> symbols = load_elf(path.c_str(), &mem, &entry);
+  elf->load(path.c_str(), &mem, &entry);
+  auto symbols = elf->get_symbols();
 
   if (symbols.count("tohost") && symbols.count("fromhost")) {
-    tohost_addr = symbols["tohost"];
-    fromhost_addr = symbols["fromhost"];
+    if(elf->check_elf32()) {
+      tohost_addr = symbols["tohost"].e32.st_value;
+      fromhost_addr = symbols["fromhost"].e32.st_value;
+    } else {
+      tohost_addr = symbols["tohost"].e64.st_value;
+      fromhost_addr = symbols["fromhost"].e64.st_value;
+    }
   } else {
     fprintf(stderr, "warning: tohost and fromhost symbols not in ELF; can't communicate with target\n");
   }
@@ -111,8 +118,13 @@ void htif_t::load_program()
   // detect torture tests so we can print the memory signature at the end
   if (symbols.count("begin_signature") && symbols.count("end_signature"))
   {
-    sig_addr = symbols["begin_signature"];
-    sig_len = symbols["end_signature"] - sig_addr;
+    if(elf->check_elf32()) {
+      sig_addr = symbols["begin_signature"].e32.st_value;
+      sig_len = symbols["end_signature"].e32.st_value - sig_addr;
+    } else {
+      sig_addr = symbols["begin_signature"].e64.st_value;
+      sig_len = symbols["end_signature"].e64.st_value - sig_addr;
+    }
   }
 }
 

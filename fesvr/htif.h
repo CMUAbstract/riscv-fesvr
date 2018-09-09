@@ -4,11 +4,13 @@
 #define __HTIF_H
 
 #include "memif.h"
+#include "elfloader.h"
 #include "syscall.h"
 #include "simcall.h"
 #include "device.h"
 #include <string.h>
 #include <vector>
+#include <map>
 
 class htif_t : public chunked_memif_t
 {
@@ -26,6 +28,7 @@ class htif_t : public chunked_memif_t
   int exit_code();
 
   virtual memif_t& memif() { return mem; }
+  elfloader_t *elfloader() { return elf; }
 
  protected:
   virtual void reset() = 0;
@@ -45,8 +48,9 @@ class htif_t : public chunked_memif_t
   reg_t get_entry_point() { return entry; }
 
   // Sim call implementations
-  virtual void mark(addr_t addr, size_t len) {};
-  virtual void clear_mark(addr_t addr, size_t len) {};
+  virtual void mark_input(addr_t addr, size_t len, size_t tag) {};
+  virtual void mark_output(addr_t addr, size_t len, size_t tag) {};
+  virtual void clear_mark(addr_t addr, size_t len, size_t tag) {};
 
  private:
   void parse_arguments(int argc, char ** argv);
@@ -73,6 +77,8 @@ class htif_t : public chunked_memif_t
   std::vector<device_t*> dynamic_devices;
 
   const std::vector<std::string>& target_args() { return targs; }
+
+  elfloader_t *elf;
 
   friend class memif_t;
   friend class syscall_t;

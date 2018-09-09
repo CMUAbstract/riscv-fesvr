@@ -20,8 +20,9 @@ class simcall_t : public device_t {
 	private:
 		void handle_simcall(command_t cmd);
 	private:
-		reg_t sim_mark(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
-		reg_t sim_clearmark(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
+		reg_t sim_mark_input(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
+		reg_t sim_mark_output(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
+		reg_t sim_clear_mark(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
 	private:
 		htif_t *htif;
 		memif_t *memif;
