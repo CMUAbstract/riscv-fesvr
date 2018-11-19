@@ -1,229 +1,52 @@
-// See LICENSE for license details.
-
-#ifndef RISCV_CSR_ENCODING_H
-#define RISCV_CSR_ENCODING_H
-
-#define MSTATUS_UIE         0x00000001
-#define MSTATUS_SIE         0x00000002
-#define MSTATUS_HIE         0x00000004
-#define MSTATUS_MIE         0x00000008
-#define MSTATUS_UPIE        0x00000010
-#define MSTATUS_SPIE        0x00000020
-#define MSTATUS_HPIE        0x00000040
-#define MSTATUS_MPIE        0x00000080
-#define MSTATUS_SPP         0x00000100
-#define MSTATUS_HPP         0x00000600
-#define MSTATUS_MPP         0x00001800
-#define MSTATUS_FS          0x00006000
-#define MSTATUS_XS          0x00018000
-#define MSTATUS_MPRV        0x00020000
-#define MSTATUS_SUM         0x00040000
-#define MSTATUS_MXR         0x00080000
-#define MSTATUS_TVM         0x00100000
-#define MSTATUS_TW          0x00200000
-#define MSTATUS_TSR         0x00400000
-#define MSTATUS32_SD        0x80000000
-#define MSTATUS_UXL         0x0000000300000000
-#define MSTATUS_SXL         0x0000000C00000000
-#define MSTATUS64_SD        0x8000000000000000
-
-#define SSTATUS_UIE         0x00000001
-#define SSTATUS_SIE         0x00000002
-#define SSTATUS_UPIE        0x00000010
-#define SSTATUS_SPIE        0x00000020
-#define SSTATUS_SPP         0x00000100
-#define SSTATUS_FS          0x00006000
-#define SSTATUS_XS          0x00018000
-#define SSTATUS_SUM         0x00040000
-#define SSTATUS_MXR         0x00080000
-#define SSTATUS32_SD        0x80000000
-#define SSTATUS_UXL         0x0000000300000000
-#define SSTATUS64_SD        0x8000000000000000
-
-#define DCSR_XDEBUGVER      (3U<<30)
-#define DCSR_NDRESET        (1<<29)
-#define DCSR_FULLRESET      (1<<28)
-#define DCSR_EBREAKM        (1<<15)
-#define DCSR_EBREAKH        (1<<14)
-#define DCSR_EBREAKS        (1<<13)
-#define DCSR_EBREAKU        (1<<12)
-#define DCSR_STOPCYCLE      (1<<10)
-#define DCSR_STOPTIME       (1<<9)
-#define DCSR_CAUSE          (7<<6)
-#define DCSR_DEBUGINT       (1<<5)
-#define DCSR_HALT           (1<<3)
-#define DCSR_STEP           (1<<2)
-#define DCSR_PRV            (3<<0)
-
-#define DCSR_CAUSE_NONE     0
-#define DCSR_CAUSE_SWBP     1
-#define DCSR_CAUSE_HWBP     2
-#define DCSR_CAUSE_DEBUGINT 3
-#define DCSR_CAUSE_STEP     4
-#define DCSR_CAUSE_HALT     5
-
-#define MCONTROL_TYPE(xlen)    (0xfULL<<((xlen)-4))
-#define MCONTROL_DMODE(xlen)   (1ULL<<((xlen)-5))
-#define MCONTROL_MASKMAX(xlen) (0x3fULL<<((xlen)-11))
-
-#define MCONTROL_SELECT     (1<<19)
-#define MCONTROL_TIMING     (1<<18)
-#define MCONTROL_ACTION     (0x3f<<12)
-#define MCONTROL_CHAIN      (1<<11)
-#define MCONTROL_MATCH      (0xf<<7)
-#define MCONTROL_M          (1<<6)
-#define MCONTROL_H          (1<<5)
-#define MCONTROL_S          (1<<4)
-#define MCONTROL_U          (1<<3)
-#define MCONTROL_EXECUTE    (1<<2)
-#define MCONTROL_STORE      (1<<1)
-#define MCONTROL_LOAD       (1<<0)
-
-#define MCONTROL_TYPE_NONE      0
-#define MCONTROL_TYPE_MATCH     2
-
-#define MCONTROL_ACTION_DEBUG_EXCEPTION   0
-#define MCONTROL_ACTION_DEBUG_MODE        1
-#define MCONTROL_ACTION_TRACE_START       2
-#define MCONTROL_ACTION_TRACE_STOP        3
-#define MCONTROL_ACTION_TRACE_EMIT        4
-
-#define MCONTROL_MATCH_EQUAL     0
-#define MCONTROL_MATCH_NAPOT     1
-#define MCONTROL_MATCH_GE        2
-#define MCONTROL_MATCH_LT        3
-#define MCONTROL_MATCH_MASK_LOW  4
-#define MCONTROL_MATCH_MASK_HIGH 5
-
-#define MIP_SSIP            (1 << IRQ_S_SOFT)
-#define MIP_HSIP            (1 << IRQ_H_SOFT)
-#define MIP_MSIP            (1 << IRQ_M_SOFT)
-#define MIP_STIP            (1 << IRQ_S_TIMER)
-#define MIP_HTIP            (1 << IRQ_H_TIMER)
-#define MIP_MTIP            (1 << IRQ_M_TIMER)
-#define MIP_SEIP            (1 << IRQ_S_EXT)
-#define MIP_HEIP            (1 << IRQ_H_EXT)
-#define MIP_MEIP            (1 << IRQ_M_EXT)
-
-#define SIP_SSIP MIP_SSIP
-#define SIP_STIP MIP_STIP
-
-#define PRV_U 0
-#define PRV_S 1
-#define PRV_H 2
-#define PRV_M 3
-
-#define SATP32_MODE 0x80000000
-#define SATP32_ASID 0x7FC00000
-#define SATP32_PPN  0x003FFFFF
-#define SATP64_MODE 0xF000000000000000
-#define SATP64_ASID 0x0FFFF00000000000
-#define SATP64_PPN  0x00000FFFFFFFFFFF
-
-#define SATP_MODE_OFF  0
-#define SATP_MODE_SV32 1
-#define SATP_MODE_SV39 8
-#define SATP_MODE_SV48 9
-#define SATP_MODE_SV57 10
-#define SATP_MODE_SV64 11
-
-#define PMP_R     0x01
-#define PMP_W     0x02
-#define PMP_X     0x04
-#define PMP_A     0x18
-#define PMP_L     0x80
-#define PMP_SHIFT 2
-
-#define PMP_TOR   0x08
-#define PMP_NA4   0x10
-#define PMP_NAPOT 0x18
-
-#define IRQ_S_SOFT   1
-#define IRQ_H_SOFT   2
-#define IRQ_M_SOFT   3
-#define IRQ_S_TIMER  5
-#define IRQ_H_TIMER  6
-#define IRQ_M_TIMER  7
-#define IRQ_S_EXT    9
-#define IRQ_H_EXT    10
-#define IRQ_M_EXT    11
-#define IRQ_COP      12
-#define IRQ_HOST     13
-
-#define DEFAULT_RSTVEC     0x00001000
-#define CLINT_BASE         0x02000000
-#define CLINT_SIZE         0x000c0000
-#define EXT_IO_BASE        0x40000000
-#define DRAM_BASE          0x80000000
-
-// page table entry (PTE) fields
-#define PTE_V     0x001 // Valid
-#define PTE_R     0x002 // Read
-#define PTE_W     0x004 // Write
-#define PTE_X     0x008 // Execute
-#define PTE_U     0x010 // User
-#define PTE_G     0x020 // Global
-#define PTE_A     0x040 // Accessed
-#define PTE_D     0x080 // Dirty
-#define PTE_SOFT  0x300 // Reserved for Software
-
-#define PTE_PPN_SHIFT 10
-
-#define PTE_TABLE(PTE) (((PTE) & (PTE_V | PTE_R | PTE_W | PTE_X)) == PTE_V)
-
-#ifdef __riscv
-
-#if __riscv_xlen == 64
-# define MSTATUS_SD MSTATUS64_SD
-# define SSTATUS_SD SSTATUS64_SD
-# define RISCV_PGLEVEL_BITS 9
-# define SATP_MODE SATP64_MODE
-#else
-# define MSTATUS_SD MSTATUS32_SD
-# define SSTATUS_SD SSTATUS32_SD
-# define RISCV_PGLEVEL_BITS 10
-# define SATP_MODE SATP32_MODE
-#endif
-#define RISCV_PGSHIFT 12
-#define RISCV_PGSIZE (1 << RISCV_PGSHIFT)
-
-#ifndef __ASSEMBLER__
-
-#ifdef __GNUC__
-
-#define read_csr(reg) ({ unsigned long __tmp; \
-  asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \
-  __tmp; })
-
-#define write_csr(reg, val) ({ \
-  asm volatile ("csrw " #reg ", %0" :: "rK"(val)); })
-
-#define swap_csr(reg, val) ({ unsigned long __tmp; \
-  asm volatile ("csrrw %0, " #reg ", %1" : "=r"(__tmp) : "rK"(val)); \
-  __tmp; })
-
-#define set_csr(reg, bit) ({ unsigned long __tmp; \
-  asm volatile ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \
-  __tmp; })
-
-#define clear_csr(reg, bit) ({ unsigned long __tmp; \
-  asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \
-  __tmp; })
-
-#define rdtime() read_csr(time)
-#define rdcycle() read_csr(cycle)
-#define rdinstret() read_csr(instret)
-
-#endif
-
-#endif
-
-#endif
-
-#endif
 /* Automatically generated by parse-opcodes.  */
 #ifndef RISCV_ENCODING_H
 #define RISCV_ENCODING_H
+#define DRAM_BASE 0x80000000
+
+#define MATCH_SLLI_RV32 0x1013
+#define MASK_SLLI_RV32  0xfe00707f
+#define MATCH_SRLI_RV32 0x5013
+#define MASK_SRLI_RV32  0xfe00707f
+#define MATCH_SRAI_RV32 0x40005013
+#define MASK_SRAI_RV32  0xfe00707f
+#define MATCH_FRFLAGS 0x102073
+#define MASK_FRFLAGS  0xfffff07f
+#define MATCH_FSFLAGS 0x101073
+#define MASK_FSFLAGS  0xfff0707f
+#define MATCH_FSFLAGSI 0x105073
+#define MASK_FSFLAGSI  0xfff0707f
+#define MATCH_FRRM 0x202073
+#define MASK_FRRM  0xfffff07f
+#define MATCH_FSRM 0x201073
+#define MASK_FSRM  0xfff0707f
+#define MATCH_FSRMI 0x205073
+#define MASK_FSRMI  0xfff0707f
+#define MATCH_FSCSR 0x301073
+#define MASK_FSCSR  0xfff0707f
+#define MATCH_FRCSR 0x302073
+#define MASK_FRCSR  0xfffff07f
+#define MATCH_RDCYCLE 0xc0002073
+#define MASK_RDCYCLE  0xfffff07f
+#define MATCH_RDTIME 0xc0102073
+#define MASK_RDTIME  0xfffff07f
+#define MATCH_RDINSTRET 0xc0202073
+#define MASK_RDINSTRET  0xfffff07f
+#define MATCH_RDCYCLEH 0xc8002073
+#define MASK_RDCYCLEH  0xfffff07f
+#define MATCH_RDTIMEH 0xc8102073
+#define MASK_RDTIMEH  0xfffff07f
+#define MATCH_RDINSTRETH 0xc8202073
+#define MASK_RDINSTRETH  0xfffff07f
+#define MATCH_SCALL 0x73
+#define MASK_SCALL  0xffffffff
+#define MATCH_SBREAK 0x100073
+#define MASK_SBREAK  0xffffffff
+#define MATCH_FMV_X_S 0xe0000053
+#define MASK_FMV_X_S  0xfff0707f
+#define MATCH_FMV_S_X 0xf0000053
+#define MASK_FMV_S_X  0xfff0707f
+#define MATCH_FENCE_TSO 0x8330000f
+#define MASK_FENCE_TSO  0xfff0707f
 #define MATCH_BEQ 0x63
 #define MASK_BEQ  0x707f
 #define MATCH_BNE 0x1063
@@ -404,6 +227,8 @@
 #define MASK_URET  0xffffffff
 #define MATCH_SRET 0x10200073
 #define MASK_SRET  0xffffffff
+#define MATCH_HRET 0x20200073
+#define MASK_HRET  0xffffffff
 #define MATCH_MRET 0x30200073
 #define MASK_MRET  0xffffffff
 #define MATCH_DRET 0x7b200073
@@ -616,26 +441,6 @@
 #define MASK_FNMSUB_Q  0x600007f
 #define MATCH_FNMADD_Q 0x600004f
 #define MASK_FNMADD_Q  0x600007f
-#define MATCH_C_NOP 0x1
-#define MASK_C_NOP  0xffff
-#define MATCH_C_ADDI16SP 0x6101
-#define MASK_C_ADDI16SP  0xef83
-#define MATCH_C_JR 0x8002
-#define MASK_C_JR  0xf07f
-#define MATCH_C_JALR 0x9002
-#define MASK_C_JALR  0xf07f
-#define MATCH_C_EBREAK 0x9002
-#define MASK_C_EBREAK  0xffff
-#define MATCH_C_LD 0x6000
-#define MASK_C_LD  0xe003
-#define MATCH_C_SD 0xe000
-#define MASK_C_SD  0xe003
-#define MATCH_C_ADDIW 0x2001
-#define MASK_C_ADDIW  0xe003
-#define MATCH_C_LDSP 0x6002
-#define MASK_C_LDSP  0xe003
-#define MATCH_C_SDSP 0xe002
-#define MASK_C_SDSP  0xe003
 #define MATCH_C_ADDI4SPN 0x0
 #define MASK_C_ADDI4SPN  0xe003
 #define MATCH_C_FLD 0x2000
@@ -700,6 +505,26 @@
 #define MASK_C_SWSP  0xe003
 #define MATCH_C_FSWSP 0xe002
 #define MASK_C_FSWSP  0xe003
+#define MATCH_C_NOP 0x1
+#define MASK_C_NOP  0xffff
+#define MATCH_C_ADDI16SP 0x6101
+#define MASK_C_ADDI16SP  0xef83
+#define MATCH_C_JR 0x8002
+#define MASK_C_JR  0xf07f
+#define MATCH_C_JALR 0x9002
+#define MASK_C_JALR  0xf07f
+#define MATCH_C_EBREAK 0x9002
+#define MASK_C_EBREAK  0xffff
+#define MATCH_C_LD 0x6000
+#define MASK_C_LD  0xe003
+#define MATCH_C_SD 0xe000
+#define MASK_C_SD  0xe003
+#define MATCH_C_ADDIW 0x2001
+#define MASK_C_ADDIW  0xe003
+#define MATCH_C_LDSP 0x6002
+#define MASK_C_LDSP  0xe003
+#define MATCH_C_SDSP 0xe002
+#define MASK_C_SDSP  0xe003
 #define MATCH_CUSTOM0 0xb
 #define MASK_CUSTOM0  0x707f
 #define MATCH_CUSTOM0_RS1 0x200b
@@ -748,6 +573,22 @@
 #define MASK_CUSTOM3_RD_RS1  0x707f
 #define MATCH_CUSTOM3_RD_RS1_RS2 0x707b
 #define MASK_CUSTOM3_RD_RS1_RS2  0x707f
+#define MATCH_VCONFIG 0x1057
+#define MASK_VCONFIG  0x707f
+#define MATCH_VSETVL 0x2057
+#define MASK_VSETVL  0x707f
+#define MATCH_VADD 0x105f
+#define MASK_VADD  0xfe00707f
+#define MATCH_VMUL 0x205f
+#define MASK_VMUL  0xfe00707f
+#define MATCH_VREDSUM 0x305f
+#define MASK_VREDSUM  0xfe00707f
+#define MATCH_VLH 0x1067
+#define MASK_VLH  0xfe00707f
+#define MATCH_VLXH 0x2067
+#define MASK_VLXH  0xfe00707f
+#define MATCH_VSH 0x3067
+#define MASK_VSH  0xfe00707f
 #define CSR_FFLAGS 0x1
 #define CSR_FRM 0x2
 #define CSR_FCSR 0x3
@@ -896,6 +737,12 @@
 #define CSR_MARCHID 0xf12
 #define CSR_MIMPID 0xf13
 #define CSR_MHARTID 0xf14
+#define CSR_VREGMAX 0x400
+#define CSR_VEMAXW 0x401
+#define CSR_VTYPEEN 0x402
+#define CSR_VL 0x403
+#define CSR_VXRM 0x404
+#define CSR_VXCM 0x405
 #define CSR_CYCLEH 0xc80
 #define CSR_TIMEH 0xc81
 #define CSR_INSTRETH 0xc82
@@ -976,6 +823,28 @@
 #define CAUSE_STORE_PAGE_FAULT 0xf
 #endif
 #ifdef DECLARE_INSN
+DECLARE_INSN(slli_rv32, MATCH_SLLI_RV32, MASK_SLLI_RV32)
+DECLARE_INSN(srli_rv32, MATCH_SRLI_RV32, MASK_SRLI_RV32)
+DECLARE_INSN(srai_rv32, MATCH_SRAI_RV32, MASK_SRAI_RV32)
+DECLARE_INSN(frflags, MATCH_FRFLAGS, MASK_FRFLAGS)
+DECLARE_INSN(fsflags, MATCH_FSFLAGS, MASK_FSFLAGS)
+DECLARE_INSN(fsflagsi, MATCH_FSFLAGSI, MASK_FSFLAGSI)
+DECLARE_INSN(frrm, MATCH_FRRM, MASK_FRRM)
+DECLARE_INSN(fsrm, MATCH_FSRM, MASK_FSRM)
+DECLARE_INSN(fsrmi, MATCH_FSRMI, MASK_FSRMI)
+DECLARE_INSN(fscsr, MATCH_FSCSR, MASK_FSCSR)
+DECLARE_INSN(frcsr, MATCH_FRCSR, MASK_FRCSR)
+DECLARE_INSN(rdcycle, MATCH_RDCYCLE, MASK_RDCYCLE)
+DECLARE_INSN(rdtime, MATCH_RDTIME, MASK_RDTIME)
+DECLARE_INSN(rdinstret, MATCH_RDINSTRET, MASK_RDINSTRET)
+DECLARE_INSN(rdcycleh, MATCH_RDCYCLEH, MASK_RDCYCLEH)
+DECLARE_INSN(rdtimeh, MATCH_RDTIMEH, MASK_RDTIMEH)
+DECLARE_INSN(rdinstreth, MATCH_RDINSTRETH, MASK_RDINSTRETH)
+DECLARE_INSN(scall, MATCH_SCALL, MASK_SCALL)
+DECLARE_INSN(sbreak, MATCH_SBREAK, MASK_SBREAK)
+DECLARE_INSN(fmv_x_s, MATCH_FMV_X_S, MASK_FMV_X_S)
+DECLARE_INSN(fmv_s_x, MATCH_FMV_S_X, MASK_FMV_S_X)
+DECLARE_INSN(fence_tso, MATCH_FENCE_TSO, MASK_FENCE_TSO)
 DECLARE_INSN(beq, MATCH_BEQ, MASK_BEQ)
 DECLARE_INSN(bne, MATCH_BNE, MASK_BNE)
 DECLARE_INSN(blt, MATCH_BLT, MASK_BLT)
@@ -1066,6 +935,7 @@ DECLARE_INSN(ecall, MATCH_ECALL, MASK_ECALL)
 DECLARE_INSN(ebreak, MATCH_EBREAK, MASK_EBREAK)
 DECLARE_INSN(uret, MATCH_URET, MASK_URET)
 DECLARE_INSN(sret, MATCH_SRET, MASK_SRET)
+DECLARE_INSN(hret, MATCH_HRET, MASK_HRET)
 DECLARE_INSN(mret, MATCH_MRET, MASK_MRET)
 DECLARE_INSN(dret, MATCH_DRET, MASK_DRET)
 DECLARE_INSN(sfence_vma, MATCH_SFENCE_VMA, MASK_SFENCE_VMA)
@@ -1172,16 +1042,6 @@ DECLARE_INSN(fmadd_q, MATCH_FMADD_Q, MASK_FMADD_Q)
 DECLARE_INSN(fmsub_q, MATCH_FMSUB_Q, MASK_FMSUB_Q)
 DECLARE_INSN(fnmsub_q, MATCH_FNMSUB_Q, MASK_FNMSUB_Q)
 DECLARE_INSN(fnmadd_q, MATCH_FNMADD_Q, MASK_FNMADD_Q)
-DECLARE_INSN(c_nop, MATCH_C_NOP, MASK_C_NOP)
-DECLARE_INSN(c_addi16sp, MATCH_C_ADDI16SP, MASK_C_ADDI16SP)
-DECLARE_INSN(c_jr, MATCH_C_JR, MASK_C_JR)
-DECLARE_INSN(c_jalr, MATCH_C_JALR, MASK_C_JALR)
-DECLARE_INSN(c_ebreak, MATCH_C_EBREAK, MASK_C_EBREAK)
-DECLARE_INSN(c_ld, MATCH_C_LD, MASK_C_LD)
-DECLARE_INSN(c_sd, MATCH_C_SD, MASK_C_SD)
-DECLARE_INSN(c_addiw, MATCH_C_ADDIW, MASK_C_ADDIW)
-DECLARE_INSN(c_ldsp, MATCH_C_LDSP, MASK_C_LDSP)
-DECLARE_INSN(c_sdsp, MATCH_C_SDSP, MASK_C_SDSP)
 DECLARE_INSN(c_addi4spn, MATCH_C_ADDI4SPN, MASK_C_ADDI4SPN)
 DECLARE_INSN(c_fld, MATCH_C_FLD, MASK_C_FLD)
 DECLARE_INSN(c_lw, MATCH_C_LW, MASK_C_LW)
@@ -1214,6 +1074,16 @@ DECLARE_INSN(c_add, MATCH_C_ADD, MASK_C_ADD)
 DECLARE_INSN(c_fsdsp, MATCH_C_FSDSP, MASK_C_FSDSP)
 DECLARE_INSN(c_swsp, MATCH_C_SWSP, MASK_C_SWSP)
 DECLARE_INSN(c_fswsp, MATCH_C_FSWSP, MASK_C_FSWSP)
+DECLARE_INSN(c_nop, MATCH_C_NOP, MASK_C_NOP)
+DECLARE_INSN(c_addi16sp, MATCH_C_ADDI16SP, MASK_C_ADDI16SP)
+DECLARE_INSN(c_jr, MATCH_C_JR, MASK_C_JR)
+DECLARE_INSN(c_jalr, MATCH_C_JALR, MASK_C_JALR)
+DECLARE_INSN(c_ebreak, MATCH_C_EBREAK, MASK_C_EBREAK)
+DECLARE_INSN(c_ld, MATCH_C_LD, MASK_C_LD)
+DECLARE_INSN(c_sd, MATCH_C_SD, MASK_C_SD)
+DECLARE_INSN(c_addiw, MATCH_C_ADDIW, MASK_C_ADDIW)
+DECLARE_INSN(c_ldsp, MATCH_C_LDSP, MASK_C_LDSP)
+DECLARE_INSN(c_sdsp, MATCH_C_SDSP, MASK_C_SDSP)
 DECLARE_INSN(custom0, MATCH_CUSTOM0, MASK_CUSTOM0)
 DECLARE_INSN(custom0_rs1, MATCH_CUSTOM0_RS1, MASK_CUSTOM0_RS1)
 DECLARE_INSN(custom0_rs1_rs2, MATCH_CUSTOM0_RS1_RS2, MASK_CUSTOM0_RS1_RS2)
@@ -1238,6 +1108,14 @@ DECLARE_INSN(custom3_rs1_rs2, MATCH_CUSTOM3_RS1_RS2, MASK_CUSTOM3_RS1_RS2)
 DECLARE_INSN(custom3_rd, MATCH_CUSTOM3_RD, MASK_CUSTOM3_RD)
 DECLARE_INSN(custom3_rd_rs1, MATCH_CUSTOM3_RD_RS1, MASK_CUSTOM3_RD_RS1)
 DECLARE_INSN(custom3_rd_rs1_rs2, MATCH_CUSTOM3_RD_RS1_RS2, MASK_CUSTOM3_RD_RS1_RS2)
+DECLARE_INSN(vconfig, MATCH_VCONFIG, MASK_VCONFIG)
+DECLARE_INSN(vsetvl, MATCH_VSETVL, MASK_VSETVL)
+DECLARE_INSN(vadd, MATCH_VADD, MASK_VADD)
+DECLARE_INSN(vmul, MATCH_VMUL, MASK_VMUL)
+DECLARE_INSN(vredsum, MATCH_VREDSUM, MASK_VREDSUM)
+DECLARE_INSN(vlh, MATCH_VLH, MASK_VLH)
+DECLARE_INSN(vlxh, MATCH_VLXH, MASK_VLXH)
+DECLARE_INSN(vsh, MATCH_VSH, MASK_VSH)
 #endif
 #ifdef DECLARE_CSR
 DECLARE_CSR(fflags, CSR_FFLAGS)
@@ -1388,6 +1266,12 @@ DECLARE_CSR(mvendorid, CSR_MVENDORID)
 DECLARE_CSR(marchid, CSR_MARCHID)
 DECLARE_CSR(mimpid, CSR_MIMPID)
 DECLARE_CSR(mhartid, CSR_MHARTID)
+DECLARE_CSR(vregmax, CSR_VREGMAX)
+DECLARE_CSR(vemaxw, CSR_VEMAXW)
+DECLARE_CSR(vtypeen, CSR_VTYPEEN)
+DECLARE_CSR(vl, CSR_VL)
+DECLARE_CSR(vxrm, CSR_VXRM)
+DECLARE_CSR(vxcm, CSR_VXCM)
 DECLARE_CSR(cycleh, CSR_CYCLEH)
 DECLARE_CSR(timeh, CSR_TIMEH)
 DECLARE_CSR(instreth, CSR_INSTRETH)
