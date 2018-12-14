@@ -48,9 +48,10 @@ class htif_t : public chunked_memif_t
   reg_t get_entry_point() { return entry; }
 
   // Sim call implementations
-  virtual void mark_input(addr_t addr, size_t len, size_t tag) {};
-  virtual void mark_output(addr_t addr, size_t len, size_t tag) {};
-  virtual void clear_mark(addr_t addr, size_t len, size_t tag) {};
+  virtual void mark(addr_t addr, size_t len, size_t tag) {};
+  virtual void unmark(addr_t addr, size_t len, size_t tag) {};
+  virtual void trace(void) {};
+  virtual void stop_trace(void) {};
 
  private:
   void parse_arguments(int argc, char ** argv);

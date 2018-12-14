@@ -1,25 +1,26 @@
 #! /bin/bash
-#
-# Script to build RISC-V ISA simulator, proxy kernel, and GNU toolchain.
-# Tools will be installed to $RISCV.
 
-. build.common
-
-if [ ! `which riscv32-unknown-elf-gcc` ]
+if [ "x$RISCV" = "x" ]
 then
-  echo "riscv32-unknown-elf-gcc doesn't appear to be installed; use the full-on build.sh"
+  echo "Please set the RISCV environment variable."
   exit 1
 fi
 
-echo "Starting RISC-V Toolchain build process"
+PATH="$RISCV/bin:$PATH"
+MAKE=`command -v gmake || command -v make`
+THREADS=`expr $(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l) \* 2`
 
-if [ $1 == 1 ]
+if [ ! `which riscv32-unknown-elf-gcc` ]
 then
-configure_project . --prefix=$(pwd)/bin
-make_project riscv-fesvr
-else
-cd build
-make_project riscv-fesvr
+  echo "riscv32-unknown-elf-gcc doesn't appear to be installed"
+  exit 1
 fi
 
-echo -e "\\nRISC-V Toolchain installation completed!"
+echo "Starting RISC-V FESVR build process"
+cd build
+echo "Building project ."
+$MAKE -j$THREADS >> build.log
+echo "Installing project ."
+$MAKE -j$THREADS install >> build.log
+cd - > /dev/null
+echo "RISC-V FESVR build done"
