@@ -9,6 +9,8 @@ simcall_t::simcall_t(htif_t *htif)
 	table[13] = &simcall_t::sim_unmark;
 	table[14] = &simcall_t::sim_trace;
 	table[15] = &simcall_t::sim_stop_trace;
+	table[16] = &simcall_t::sim_enable_intermittent;
+	table[17] = &simcall_t::sim_disable_intermittent;
 	register_command(0, std::bind(
 		&simcall_t::handle_simcall, this, std::placeholders::_1), "simcall");
 }
@@ -48,5 +50,17 @@ reg_t simcall_t::sim_trace(
 reg_t simcall_t::sim_stop_trace(
 	reg_t addr, reg_t size, reg_t tag, reg_t a3, reg_t a4, reg_t a5, reg_t a6) {
 	htif->stop_trace();
+	return 0;
+}
+
+reg_t simcall_t::sim_enable_intermittent(
+	reg_t addr, reg_t size, reg_t tag, reg_t a3, reg_t a4, reg_t a5, reg_t a6) {
+	htif->enable_intermittent();
+	return 0;
+}
+
+reg_t simcall_t::sim_disable_intermittent(
+	reg_t addr, reg_t size, reg_t tag, reg_t a3, reg_t a4, reg_t a5, reg_t a6) {
+	htif->disable_intermittent();
 	return 0;
 }

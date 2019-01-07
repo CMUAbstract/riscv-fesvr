@@ -24,6 +24,8 @@ class simcall_t : public device_t {
 		reg_t sim_unmark(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
 		reg_t sim_trace(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
 		reg_t sim_stop_trace(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
+		reg_t sim_enable_intermittent(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
+		reg_t sim_disable_intermittent(reg_t, reg_t, reg_t, reg_t, reg_t, reg_t, reg_t);
 	private:
 		htif_t *htif;
 		memif_t *memif;

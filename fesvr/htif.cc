@@ -29,6 +29,8 @@
 # define TARGET_DIR "/" TARGET_ARCH "/bin/"
 #endif
 
+#define DRAM_BASE 0x80000000
+
 static volatile bool signal_exit = false;
 static void handle_signal(int sig)
 {

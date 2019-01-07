@@ -52,6 +52,8 @@ class htif_t : public chunked_memif_t
   virtual void unmark(addr_t addr, size_t len, size_t tag) {};
   virtual void trace(void) {};
   virtual void stop_trace(void) {};
+  virtual void enable_intermittent() {};
+  virtual void disable_intermittent() {};
 
  private:
   void parse_arguments(int argc, char ** argv);
