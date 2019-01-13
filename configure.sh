@@ -31,6 +31,6 @@ fi
 mkdir -p "./build"
 cd "./build"
 echo "Configuring project ."
-../configure --prefix=$(pwd)/bin > build.log
+../configure --prefix=$(pwd)/../bin > build.log
 
 echo "Done configuring RISC-V FESVR"
